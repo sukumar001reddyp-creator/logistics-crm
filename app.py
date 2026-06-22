@@ -26,22 +26,20 @@ def login_check():
 
         conn = get_db_connection()
 
-    admin = conn.execute(
-        """
-        SELECT * FROM admins
-        WHERE username=?
-        AND password=?
-        """,
-        (username, password)
-    ).fetchone()
+        admin = conn.execute(
+            """
+            SELECT * FROM admins
+            WHERE username=?
+            AND password=?
+            """,
+            (username, password)
+        ).fetchone()
 
-    conn.close()
+        conn.close()
 
-    if admin:
-
-        session['user'] = admin['username']
-
-        return redirect('/')
+        if admin:
+            session['user'] = admin['username']
+            return redirect('/')
 
     elif role == "employee":
 
@@ -59,7 +57,6 @@ def login_check():
         conn.close()
 
         if employee:
-
             session['employee'] = employee['username']
             return redirect('/employee_dashboard')
 
