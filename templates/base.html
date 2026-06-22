@@ -29,17 +29,17 @@
             top: 0; 
             left: 0; 
             right: 0; 
-            height: 75px; 
+            height: 70px; 
             background: white; 
             box-shadow: 0 4px 20px rgba(0,0,0,0.08); 
             display: flex; 
             align-items: center; 
-            padding: 0 35px; 
+            padding: 0 20px; 
             z-index: 1000; 
         }
         
         .brand { 
-            font-size: 24px; 
+            font-size: 22px; 
             font-weight: 800; 
             color: var(--primary); 
             display: flex; 
@@ -47,15 +47,17 @@
             gap: 10px; 
         }
 
-        /* Sidebar - Width తగ్గించాం */
+        /* Sidebar */
         .sidebar { 
-            width: 260px;           /* ← ఇది తగ్గించాం */
+            width: 260px; 
             background: #0f172a; 
             position: fixed; 
-            top: 75px; 
+            top: 70px; 
             bottom: 0; 
-            padding: 30px 20px; 
+            padding: 25px 20px; 
             box-shadow: 4px 0 20px rgba(0,0,0,0.1); 
+            overflow-y: auto;
+            transition: all 0.3s;
         }
         
         .menu { 
@@ -66,7 +68,6 @@
             margin-bottom: 8px; 
             border-radius: 12px; 
             transition: 0.3s; 
-            overflow: hidden; 
         }
         
         .menu li a { 
@@ -82,7 +83,6 @@
         
         .menu li:hover, .menu li.active { 
             background: var(--accent); 
-            transform: translateX(5px); 
         }
         
         .menu li:hover a, .menu li.active a { 
@@ -91,15 +91,69 @@
 
         /* Main Content */
         .main-content { 
-            margin-left: 260px;     /* ← ఇది కూడా update చేశాం */
-            padding: 110px 40px 40px; 
+            margin-left: 260px; 
+            padding: 100px 30px 40px; 
+            min-height: 100vh;
         }
         
         .page-title { 
-            font-size: 30px; 
+            font-size: 28px; 
             font-weight: 700; 
             color: #0f172a; 
-            margin-bottom: 30px; 
+            margin-bottom: 25px; 
+        }
+
+        /* ==================== MOBILE RESPONSIVE ==================== */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 240px;
+            }
+            .main-content {
+                margin-left: 240px;
+                padding: 100px 20px 40px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                left: -260px;           /* Hidden by default on mobile */
+                z-index: 999;
+                box-shadow: 5px 0 25px rgba(0,0,0,0.2);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 90px 15px 30px;
+            }
+            
+            .top-bar {
+                padding: 0 15px;
+                height: 65px;
+            }
+            
+            .brand {
+                font-size: 20px;
+            }
+            
+            .page-title {
+                font-size: 24px;
+            }
+        }
+
+        /* Mobile Menu Toggle Button */
+        .menu-toggle {
+            display: none;
+            font-size: 26px;
+            color: var(--primary);
+            cursor: pointer;
+            margin-left: auto;
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
         }
     </style>
 </head>
@@ -107,9 +161,10 @@
 
 <div class="top-bar">
     <div class="brand">🚛 LOGISTICS CRM</div>
+    <i class="fas fa-bars menu-toggle" onclick="toggleSidebar()"></i>
 </div>
 
-<div class="sidebar">
+<div class="sidebar" id="sidebar">
     <ul class="menu">
         <li {% if active == 'dashboard' %}class="active"{% endif %}><a href="/"><i class="fas fa-home"></i> Dashboard</a></li>
         <li {% if active == 'clients' %}class="active"{% endif %}><a href="/clients"><i class="fas fa-users"></i> Clients</a></li>
@@ -130,6 +185,24 @@
     <h1 class="page-title">{% block page_title %}{% endblock %}</h1>
     {% block content %}{% endblock %}
 </div>
+
+<script>
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.style.left = sidebar.style.left === '0px' ? '-260px' : '0px';
+    }
+
+    // Close sidebar when clicking outside (optional improvement)
+    document.addEventListener('click', function(event) {
+        const sidebar = document.getElementById('sidebar');
+        const toggleBtn = document.querySelector('.menu-toggle');
+        if (window.innerWidth <= 768 && 
+            !sidebar.contains(event.target) && 
+            !toggleBtn.contains(event.target)) {
+            sidebar.style.left = '-260px';
+        }
+    });
+</script>
 
 </body>
 </html>
