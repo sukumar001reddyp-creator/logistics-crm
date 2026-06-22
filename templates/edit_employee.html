@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Employee - Logistics CRM{% endblock %}
+
+{% block page_title %}Edit Employee{% endblock %}
+
+{% block content %}
+<div style="max-width: 550px; margin: 0 auto;">
+    <div style="background: white; border-radius: 24px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); padding: 45px 40px;">
+        
+        <div style="text-align: center; margin-bottom: 40px;">
+            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #3b82f6, #1e40af); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                <i class="fas fa-user-edit" style="font-size: 36px; color: white;"></i>
+            </div>
+            <h2 style="color: #1e40af; font-size: 28px; margin-bottom: 8px;">Edit Employee</h2>
+            <p style="color: #64748b; font-size: 16px;">Update the details below</p>
+        </div>
+
+        <form action="/update_employee/{{ employee['id'] }}" method="POST">
+            
+            <div style="position: relative; margin-bottom: 24px;">
+                <i class="fas fa-user" style="position: absolute; left: 18px; top: 16px; color: #64748b; font-size: 18px;"></i>
+                <input 
+                    type="text" 
+                    name="name" 
+                    value="{{ employee['name'] }}"
+                    placeholder="Employee Full Name" 
+                    required
+                    style="width: 100%; padding: 16px 20px 16px 55px; border: 2px solid #e2e8f0; border-radius: 14px; font-size: 16.5px; transition: all 0.3s;">
+            </div>
+
+            <div style="position: relative; margin-bottom: 24px;">
+                <i class="fas fa-user-tag" style="position: absolute; left: 18px; top: 16px; color: #64748b; font-size: 18px;"></i>
+                <input 
+                    type="text" 
+                    name="username" 
+                    value="{{ employee['username'] }}"
+                    placeholder="Username" 
+                    required
+                    style="width: 100%; padding: 16px 20px 16px 55px; border: 2px solid #e2e8f0; border-radius: 14px; font-size: 16.5px; transition: all 0.3s;">
+            </div>
+
+            <div style="position: relative; margin-bottom: 35px;">
+                <i class="fas fa-lock" style="position: absolute; left: 18px; top: 16px; color: #64748b; font-size: 18px;"></i>
+                <input 
+                    type="password" 
+                    name="password" 
+                    value="{{ employee['password'] }}"
+                    placeholder="New Password (optional)" 
+                    style="width: 100%; padding: 16px 20px 16px 55px; border: 2px solid #e2e8f0; border-radius: 14px; font-size: 16.5px; transition: all 0.3s;">
+            </div>
+
+            <div style="display: flex; gap: 15px;">
+                <button type="submit" 
+                        style="flex: 1; padding: 16px; background: #2563eb; color: white; border: none; border-radius: 14px; font-size: 17px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                    <i class="fas fa-save"></i> Update Employee
+                </button>
+                
+                <a href="/employees" 
+                   style="flex: 1; padding: 16px; background: #64748b; color: white; border: none; border-radius: 14px; font-size: 17px; font-weight: 600; text-decoration: none; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    <i class="fas fa-arrow-left"></i> Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
