@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Logistics CRM{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <style>
+        :root { 
+            --primary: #1e3a8a; 
+            --accent: #1e40af; 
+        }
+        
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
+        body { 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+            background: #f8fafc; 
+            color: #1e2937; 
+        }
+
+        /* Top Bar */
+        .top-bar { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            right: 0; 
+            height: 75px; 
+            background: white; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08); 
+            display: flex; 
+            align-items: center; 
+            padding: 0 35px; 
+            z-index: 1000; 
+        }
+        
+        .brand { 
+            font-size: 24px; 
+            font-weight: 800; 
+            color: var(--primary); 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+        }
+
+        /* Sidebar - Width తగ్గించాం */
+        .sidebar { 
+            width: 260px;           /* ← ఇది తగ్గించాం */
+            background: #0f172a; 
+            position: fixed; 
+            top: 75px; 
+            bottom: 0; 
+            padding: 30px 20px; 
+            box-shadow: 4px 0 20px rgba(0,0,0,0.1); 
+        }
+        
+        .menu { 
+            list-style: none; 
+        }
+        
+        .menu li { 
+            margin-bottom: 8px; 
+            border-radius: 12px; 
+            transition: 0.3s; 
+            overflow: hidden; 
+        }
+        
+        .menu li a { 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            padding: 15px 20px; 
+            color: #e2e8f0; 
+            text-decoration: none; 
+            font-size: 15.5px; 
+            transition: 0.3s; 
+        }
+        
+        .menu li:hover, .menu li.active { 
+            background: var(--accent); 
+            transform: translateX(5px); 
+        }
+        
+        .menu li:hover a, .menu li.active a { 
+            color: white; 
+        }
+
+        /* Main Content */
+        .main-content { 
+            margin-left: 260px;     /* ← ఇది కూడా update చేశాం */
+            padding: 110px 40px 40px; 
+        }
+        
+        .page-title { 
+            font-size: 30px; 
+            font-weight: 700; 
+            color: #0f172a; 
+            margin-bottom: 30px; 
+        }
+    </style>
+</head>
+<body>
+
+<div class="top-bar">
+    <div class="brand">🚛 LOGISTICS CRM</div>
+</div>
+
+<div class="sidebar">
+    <ul class="menu">
+        <li {% if active == 'dashboard' %}class="active"{% endif %}><a href="/"><i class="fas fa-home"></i> Dashboard</a></li>
+        <li {% if active == 'clients' %}class="active"{% endif %}><a href="/clients"><i class="fas fa-users"></i> Clients</a></li>
+        <li {% if active == 'shipments' %}class="active"{% endif %}><a href="/shipments"><i class="fas fa-truck"></i> Shipments</a></li>
+        <li {% if active == 'invoices' %}class="active"{% endif %}><a href="/invoices"><i class="fas fa-file-invoice"></i> Invoices</a></li>
+        <li {% if active == 'reports' %}class="active"{% endif %}><a href="/reports"><i class="fas fa-chart-bar"></i> Reports</a></li>
+        <li {% if active == 'employees' %}class="active"{% endif %}>
+            <a href="/employees"><i class="fas fa-user-tie"></i> Employees</a>
+        </li>
+        <li {% if active == 'settings' %}class="active"{% endif %}>
+            <a href="/change_admin_password"><i class="fas fa-cog"></i> Settings</a>
+        </li>
+        <li><a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+    </ul>
+</div>
+
+<div class="main-content">
+    <h1 class="page-title">{% block page_title %}{% endblock %}</h1>
+    {% block content %}{% endblock %}
+</div>
+
+</body>
+</html>

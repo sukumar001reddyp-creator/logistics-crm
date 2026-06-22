@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Invoices - Logistics CRM{% endblock %}
+{% block page_title %}Invoices{% endblock %}
+
+{% block content %}
+<style>
+    /* Premium Section Styles */
+    .premium-card { background: #ffffff; padding: 30px; border-radius: 16px; border: 1px solid #e2e8f0; margin-bottom: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+    
+    /* Form Grid */
+    .add-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; align-items: center; }
+    .input-field { padding: 14px; border: 1.5px solid #e2e8f0; border-radius: 10px; width: 100%; font-size: 14px; }
+    .input-field:focus { border-color: #2563eb; outline: none; }
+    
+    /* Button Styles */
+    .btn-save { padding: 14px 28px; background: linear-gradient(135deg, #1e40af, #3b82f6); color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; transition: 0.3s; width: 100%; }
+    .btn-save:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(30, 64, 175, 0.3); }
+    
+    .action-btn { padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; display: inline-block; transition: 0.2s; }
+    .edit { background: #f0fdf4; color: #166534; }
+    .edit:hover { background: #dcfce7; }
+    .delete { background: #fef2f2; color: #991b1b; }
+    .delete:hover { background: #fee2f2; }
+
+    /* Badge Styles */
+    .status { padding: 6px 14px; border-radius: 50px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+    .paid { background: #dcfce7; color: #166534; }
+    .unpaid { background: #fee2e2; color: #b91c1c; }
+</style>
+
+<!-- Add New Invoice -->
+<div class="premium-card">
+    <h2 style="margin-bottom: 20px; font-size: 20px; color: #0f172a;">Add New Invoice</h2>
+    <form action="/add_invoice" method="POST" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; align-items: center;">
+        <input type="text" name="invoice_no" class="input-field" placeholder="Invoice #" required>
+        <input type="text" name="client_name" class="input-field" placeholder="Client Name" required>
+        <input type="number" name="amount" class="input-field" placeholder="Amount (KWD)" step="0.001" required>
+        <input type="date" name="invoice_date" class="input-field" required>
+        <select name="status" class="input-field" required>
+            <option value="" disabled selected>Status</option>
+            <option value="Paid">Paid</option>
+            <option value="Unpaid">Unpaid</option>
+        </select>
+        <button type="submit" class="btn-save"><i class="fas fa-plus"></i> Add</button>
+    </form>
+</div>
+
+<!-- Invoices Table -->
+<div class="premium-card">
+    <h2 style="margin-bottom: 20px; font-size: 20px; color: #0f172a;">Invoice Records</h2>
+    <table style="width:100%; border-collapse: collapse;">
+        <thead>
+            <tr style="border-bottom: 2px solid #f1f5f9;">
+                <th style="padding:16px; color:#64748b; font-size: 13px; text-transform: uppercase;">ID</th>
+                <th style="padding:16px; color:#64748b; font-size: 13px; text-transform: uppercase;">Invoice #</th>
+                <th style="padding:16px; color:#64748b; font-size: 13px; text-transform: uppercase;">Client</th>
+                <th style="padding:16px; color:#64748b; font-size: 13px; text-transform: uppercase;">Amount</th>
+                <th style="padding:16px; color:#64748b; font-size: 13px; text-transform: uppercase;">Date</th>
+                <th style="padding:16px; color:#64748b; font-size: 13px; text-transform: uppercase;">Status</th>
+                <th style="padding:16px; color:#64748b; font-size: 13px; text-transform: uppercase;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for invoice in invoices %}
+            <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#f8fafc'" onmouseout="this.style.backgroundColor='transparent'">
+                <td style="padding:16px; font-weight:600;">#{{ invoice[0] }}</td>
+                <td style="padding:16px;">{{ invoice[1] }}</td>
+                <td style="padding:16px;">{{ invoice[2] }}</td>
+                <td style="padding:16px; font-weight:600;">{{ invoice[3] }} KWD</td>
+                <td style="padding:16px;">{{ invoice[4] }}</td>
+                <td style="padding:16px;">
+                    <span class="status {% if invoice[5] == 'Paid' %}paid{% else %}unpaid{% endif %}">
+                        {{ invoice[5] }}
+                    </span>
+                </td>
+                <td style="padding:16px;">
+                    <a href="/edit_invoice/{{ invoice[0] }}" class="action-btn edit"><i class="fas fa-edit"></i> Edit</a>
+                    <a href="/delete_invoice/{{ invoice[0] }}" class="action-btn delete" onclick="return confirm('Delete this invoice?');" style="margin-left:5px;"><i class="fas fa-trash"></i> Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

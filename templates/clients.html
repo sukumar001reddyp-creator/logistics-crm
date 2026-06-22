@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Clients - Logistics CRM{% endblock %}
+{% block page_title %}Clients{% endblock %}
+
+{% block content %}
+<style>
+    /* Premium Styling */
+    .premium-card { background: #ffffff; padding: 30px; border-radius: 16px; border: 1px solid #e2e8f0; margin-bottom: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+    .input-field { padding: 14px; border: 1.5px solid #e2e8f0; border-radius: 10px; width: 100%; font-size: 14px; }
+    .input-field:focus { border-color: #2563eb; outline: none; }
+    
+    /* Buttons */
+    .btn-save { 
+        padding: 14px 20px; 
+        background: linear-gradient(135deg, #1e40af, #3b82f6); 
+        color: white; 
+        border: none; 
+        border-radius: 10px; 
+        font-weight: 600; 
+        cursor: pointer; 
+        transition: 0.3s; 
+        width: 100%; 
+        font-size: 14px;
+    }
+    .btn-save:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(30, 64, 175, 0.3); }
+    
+    /* Search Bar Specific */
+    .search-container { display: flex; gap: 10px; align-items: center; }
+    .search-container .input-field { flex: 1; margin: 0; }
+    .btn-search { padding: 14px 25px; background: #2563eb; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; }
+    .btn-clear { padding: 14px 25px; background: #64748b; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; text-decoration: none; }
+
+    /* Action Buttons */
+    .btn-action { padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; transition: 0.2s; }
+    .btn-edit { background: #f0fdf4; color: #166534; }
+    .btn-edit:hover { background: #dcfce7; }
+    .btn-delete { background: #fef2f2; color: #991b1b; }
+    .btn-delete:hover { background: #fee2e2; }
+</style>
+
+<!-- Add New Client - Single Row -->
+<div class="premium-card">
+    <h2 style="margin-bottom: 25px; font-size: 20px; color: #0f172a;">Register New Client</h2>
+    <form action="/add_client" method="POST" style="display: grid; grid-template-columns: 1.5fr 1.5fr 1fr 1fr 1fr 0.8fr; gap: 15px; align-items: center;">
+        <input type="text" name="company" class="input-field" placeholder="Company Name" required>
+        <input type="text" name="contact_person" class="input-field" placeholder="Contact Person" required>
+        <input type="text" name="phone" class="input-field" placeholder="Phone" required>
+        <input type="email" name="email" class="input-field" placeholder="Email" required>
+        <input type="text" name="country" class="input-field" placeholder="Country" required>
+        <button type="submit" class="btn-save"><i class="fas fa-save"></i> Save</button>
+    </form>
+</div>
+
+<!-- Search Bar -->
+<div class="premium-card" style="padding: 20px;">
+    <form method="GET" action="/clients" class="search-container">
+        <input type="text" name="search" class="input-field" placeholder="Search by company, contact or country..." value="{{ search }}">
+        <button type="submit" class="btn-search">Search</button>
+        <a href="/clients" class="btn-clear" style="display: inline-block;">Clear</a>
+    </form>
+</div>
+
+<!-- Clients Table -->
+<div class="premium-card">
+    <h2 style="margin-bottom: 20px; font-size: 20px; color: #0f172a;">Client Directory</h2>
+    <table style="width:100%; border-collapse: collapse;">
+        <thead>
+            <tr style="border-bottom: 2px solid #f1f5f9;">
+                <th style="padding:16px; color:#64748b; font-size: 13px; text-transform: uppercase;">ID</th>
+                <th style="padding:16px; color:#64748b; font-size: 13px; text-transform: uppercase;">Company</th>
+                <th style="padding:16px; color:#64748b; font-size: 13px; text-transform: uppercase;">Contact</th>
+                <th style="padding:16px; color:#64748b; font-size: 13px; text-transform: uppercase;">Phone</th>
+                <th style="padding:16px; color:#64748b; font-size: 13px; text-transform: uppercase;">Email</th>
+                <th style="padding:16px; color:#64748b; font-size: 13px; text-transform: uppercase;">Country</th>
+                <th style="padding:16px; color:#64748b; font-size: 13px; text-transform: uppercase;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for client in clients %}
+            <tr style="border-bottom: 1px solid #f1f5f9; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#f8fafc'" onmouseout="this.style.backgroundColor='transparent'">
+                <td style="padding:16px; font-weight:600;">#{{ client[0] }}</td>
+                <td style="padding:16px;">{{ client[1] }}</td>
+                <td style="padding:16px;">{{ client[2] }}</td>
+                <td style="padding:16px;">{{ client[3] }}</td>
+                <td style="padding:16px;">{{ client[4] }}</td>
+                <td style="padding:16px;">{{ client[5] }}</td>
+                <td style="padding:16px;">
+                    <a href="/edit_client/{{ client[0] }}" style="text-decoration:none;">
+                        <button class="btn-action btn-edit"><i class="fas fa-edit"></i> Edit</button>
+                    </a>
+                    <a href="/delete_client/{{ client[0] }}" onclick="return confirm('Delete this client?');" style="text-decoration:none; margin-left: 5px;">
+                        <button class="btn-action btn-delete"><i class="fas fa-trash"></i> Delete</button>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

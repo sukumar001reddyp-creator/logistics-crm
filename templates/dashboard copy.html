@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logistics CRM | Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
+        body { background: #f8fafc; color: #334155; }
+        .container { display: flex; min-height: 100vh; }
+
+        /* Sidebar - Corporate Style */
+        .sidebar { width: 260px; background: #0f172a; color: #e2e8f0; padding: 20px; }
+        .logo { font-size: 22px; font-weight: bold; margin-bottom: 40px; color: #38bdf8; text-align: center; border-bottom: 1px solid #1e293b; padding-bottom: 20px; }
+        .menu { list-style: none; }
+        .menu li { padding: 15px; margin-bottom: 5px; border-radius: 8px; cursor: pointer; transition: 0.3s; font-size: 15px; }
+        .menu li:hover { background: #1e293b; color: white; }
+
+        /* Main Content */
+        .main { flex: 1; padding: 30px; }
+        .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .search-input { width: 350px; padding: 12px 15px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; }
+        
+        .header { font-size: 26px; font-weight: 700; color: #0f172a; margin-bottom: 25px; }
+
+        /* KPI Cards */
+        .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
+        .card { background: white; padding: 25px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .card h2 { font-size: 28px; color: #0f172a; margin-bottom: 5px; }
+        .card p { color: #64748b; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        /* Table Design */
+        .table-box { background: white; padding: 25px; border-radius: 12px; border: 1px solid #e2e8f0; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #f8fafc; padding: 16px; text-align: left; color: #475569; font-size: 14px; border-bottom: 2px solid #e2e8f0; }
+        td { padding: 16px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
+        
+        /* Status Badges */
+        .status { padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+        .transit { background: #eff6ff; color: #1e40af; }
+        .delivered { background: #f0fdf4; color: #166534; }
+        .pending { background: #fffbeb; color: #b45309; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="sidebar">
+        <div class="logo">LOGISTICS CRM</div>
+        <ul class="menu">
+            <li onclick="window.location='/'">Dashboard</li>
+            <li onclick="window.location='/clients'">Clients</li>
+            <li onclick="window.location='/shipments'">Shipments</li>
+            <li>Invoices</li>
+            <li>Reports</li>
+            <li>Settings</li>
+            <li onclick="window.location='/logout'">Logout</li>
+        </ul>
+    </div>
+
+    <div class="main">
+        <div class="topbar">
+            <div class="header">Dashboard</div>
+            <input type="text" class="search-input" placeholder="Search shipments, clients...">
+        </div>
+
+        <div class="cards">
+            <div class="card"><h2>{{ total_clients }}</h2><p>Total Clients</p></div>
+            <div class="card"><h2>{{ total_shipments }}</h2><p>Total Shipments</p></div>
+            <div class="card"><h2>{{ delivered_shipments }}</h2><p>Delivered</p></div>
+            <div class="card"><h2>{{ pending_shipments }}</h2><p>Pending</p></div>
+        </div>
+
+        <div class="table-box">
+            <h2 style="margin-bottom: 20px;">Recent Shipments</h2>
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Client</th>
+                    <th>Origin</th>
+                    <th>Destination</th>
+                    <th>Status</th>
+                </tr>
+                {% for s in shipments %}
+                <tr>
+                    <td>#{{ s[0] }}</td> 
+                    <td>{{ s[1] }}</td> 
+                    <td>{{ s[2] }}</td> 
+                    <td>{{ s[3] }}</td> 
+                    <td>
+                        <span class="status {% if s[4] == 'Delivered' %}delivered{% elif s[4] == 'Pending' %}pending{% else %}transit{% endif %}">
+                            {{ s[4] }}
+                        </span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

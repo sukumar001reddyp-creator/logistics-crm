@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Shipment</title>
+    <style>
+        body { font-family: Arial; background: #f8fafc; padding: 50px; }
+        .form-card { background: white; padding: 30px; border-radius: 15px; max-width: 500px; margin: auto; }
+        input, select { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; }
+        .btn { background: #22c55e; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+<div class="form-card">
+    <h2>Edit Shipment</h2>
+    <form action="/update_shipment/{{ shipment[0] }}" method="POST">
+        <input type="text" name="client_name" value="{{ shipment[1] }}" required>
+        <input type="text" name="origin" value="{{ shipment[2] }}" required>
+        <input type="text" name="destination" value="{{ shipment[3] }}" required>
+        <select name="status">
+            <option value="Pending" {% if shipment[4] == 'Pending' %}selected{% endif %}>Pending</option>
+            <option value="In Transit" {% if shipment[4] == 'In Transit' %}selected{% endif %}>In Transit</option>
+            <option value="Delivered" {% if shipment[4] == 'Delivered' %}selected{% endif %}>Delivered</option>
+        </select>
+        <button class="btn" type="submit">Update Shipment</button>
+    </form>
+</div>
+</body>
+</html>
